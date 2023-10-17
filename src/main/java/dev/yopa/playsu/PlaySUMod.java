@@ -27,6 +27,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -137,6 +138,11 @@ public class PlaySUMod
         }
 
         @SubscribeEvent
+        public static void entityAttributes(EntityAttributeCreationEvent event) {
+            event.put(CHAMPSU.get(), ChampSU.getChampSUAttributes().build());
+        }
+
+        @SubscribeEvent
         public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(CHAMPSU.get(), ChampSURenderer::new);
         }
@@ -145,5 +151,7 @@ public class PlaySUMod
         public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
             event.registerLayerDefinition(ChampSUModel.LAYER_LOCATION, ChampSUModel::createBodyLayer);
         }
+
+
     }
 }
