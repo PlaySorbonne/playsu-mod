@@ -1,13 +1,18 @@
 package dev.yopa.playsu;
 
 import com.mojang.logging.LogUtils;
+import dev.yopa.playsu.blocks.ChampiSU;
 import dev.yopa.playsu.blocks.PlotBlock;
 import dev.yopa.playsu.client.models.ChampSUModel;
 import dev.yopa.playsu.client.renderers.ChampSURenderer;
 import dev.yopa.playsu.entities.ChampSU;
 import dev.yopa.playsu.items.PlotItem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -20,11 +25,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.MushroomBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.dimension.DimensionDefaults;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.model.obj.ObjMaterialLibrary;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -60,11 +69,15 @@ public class PlaySUMod
 
     public static final RegistryObject<Block> PLOT_BLOCK = BLOCKS.register("plot", () -> new PlotBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE)));
     public static final RegistryObject<Item> PLOT_BLOCK_ITEM = ITEMS.register("plot", () -> new PlotItem(PLOT_BLOCK.get(), new Item.Properties()));
+
+    public static final RegistryObject<Block> CHAMPISU = BLOCKS.register("champisu", () -> new ChampiSU(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM).noOcclusion()));
+    public static final RegistryObject<Item> CHAMPISU_ITEM = ITEMS.register("champisu", () -> new BlockItem(CHAMPISU.get(), new Item.Properties()));
     public static final RegistryObject<CreativeModeTab> PLAYSU_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> PLOT_BLOCK_ITEM.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(PLOT_BLOCK_ITEM.get()); // Add the example item to the tab. For your own tabs, this method is preferred over the event
+                output.accept(CHAMPISU_ITEM.get());
             }).build());
     public static final RegistryObject<EntityType<ChampSU>> CHAMPSU = ENTITIES.register("champsu", () ->
                     EntityType.Builder.of(ChampSU::new, MobCategory.CREATURE)
@@ -135,6 +148,7 @@ public class PlaySUMod
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+            ItemBlockRenderTypes.setRenderLayer(CHAMPISU.get(), RenderType.translucent());
         }
 
         @SubscribeEvent

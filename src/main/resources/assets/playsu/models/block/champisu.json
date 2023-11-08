@@ -1,0 +1,7 @@
+{
+  "render_type": "minecraft:cutout",
+  "parent": "playsu:block/cross",
+  "textures": {
+    "cross": "playsu:block/champisu"
+  }
+}
