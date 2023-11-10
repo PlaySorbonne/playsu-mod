@@ -33,6 +33,7 @@ public class ChampSU extends Mob {
 
     }
 
+
     public static AttributeSupplier.Builder getChampSUAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 25.0D)

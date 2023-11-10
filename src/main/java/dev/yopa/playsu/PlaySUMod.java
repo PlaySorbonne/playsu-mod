@@ -4,8 +4,12 @@ import com.mojang.logging.LogUtils;
 import dev.yopa.playsu.blocks.ChampiSU;
 import dev.yopa.playsu.blocks.PlotBlock;
 import dev.yopa.playsu.client.models.ChampSUModel;
+import dev.yopa.playsu.client.models.DiceEntityModel;
 import dev.yopa.playsu.client.renderers.ChampSURenderer;
+import dev.yopa.playsu.client.renderers.DiceEntityRenderer;
 import dev.yopa.playsu.entities.ChampSU;
+import dev.yopa.playsu.entities.DiceEntity;
+import dev.yopa.playsu.items.DiceItem;
 import dev.yopa.playsu.items.PlotItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -84,8 +88,14 @@ public class PlaySUMod
                             .build("playsu:champsu")
     );
 
-    public PlaySUMod()
-    {
+    public static final RegistryObject<Item> DICE_ITEM = ITEMS.register("dice", () -> new DiceItem(new Item.Properties()));
+
+    public static final RegistryObject<EntityType<DiceEntity>> DICE_ENTITY = ENTITIES.register("dice", () ->
+            EntityType.Builder.<DiceEntity>of(DiceEntity::new, MobCategory.MISC)
+                    .build("playsu:dice")
+    );
+
+    public PlaySUMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the commonSetup method for modloading
@@ -154,16 +164,21 @@ public class PlaySUMod
         @SubscribeEvent
         public static void entityAttributes(EntityAttributeCreationEvent event) {
             event.put(CHAMPSU.get(), ChampSU.getChampSUAttributes().build());
+            event.put(DICE_ENTITY.get(), DiceEntity.createLivingAttributes().build());
         }
 
         @SubscribeEvent
         public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(CHAMPSU.get(), ChampSURenderer::new);
+            event.registerEntityRenderer(DICE_ENTITY.get(), DiceEntityRenderer::new);
         }
 
         @SubscribeEvent
         public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event) {
             event.registerLayerDefinition(ChampSUModel.LAYER_LOCATION, ChampSUModel::createBodyLayer);
+            event.registerLayerDefinition(DiceEntityModel.LAYER_LOCATION, DiceEntityModel::createBodyLayer);
+
+
         }
 
 
