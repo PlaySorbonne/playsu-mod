@@ -34,7 +34,13 @@ public class DiceEntityModel<T extends Entity> extends EntityModel<T> {
 
 	@Override
 	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+		if (!entity.onGround()) {
+			this.bone.zRot = limbSwingAmount * 2.0f;
+			this.bone.yRot = limbSwingAmount * 2.0f;
+			this.bone.xRot = limbSwingAmount * 2.0f;
+		} else {
+			this.bone.setRotation(0,0,0);
+		}
 	}
 
 	@Override

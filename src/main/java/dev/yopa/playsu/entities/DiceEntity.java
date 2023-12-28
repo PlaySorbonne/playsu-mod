@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ItemStackMap;
 
 import java.util.Random;
@@ -30,6 +31,7 @@ public class DiceEntity extends LivingEntity {
     public DiceEntity(Level level, Player player) {
         this(DICE_ENTITY.get(), level);
         this.setPos(player.getEyePosition());
+        this.addDeltaMovement(player.getLookAngle());
     }
 
     public EntityDataAccessor<Integer> getSideData() {
@@ -39,7 +41,7 @@ public class DiceEntity extends LivingEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SIDE, (int)(Math.random() * ((6 - 1) + 1)) + 1);
+        this.entityData.define(SIDE, (int)new Random().nextInt(6 + 1) + 1);
     }
 
     @Override

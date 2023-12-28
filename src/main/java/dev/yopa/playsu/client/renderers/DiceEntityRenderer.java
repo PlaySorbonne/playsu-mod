@@ -1,12 +1,10 @@
 package dev.yopa.playsu.client.renderers;
 
 import dev.yopa.playsu.PlaySUMod;
-import dev.yopa.playsu.client.models.ChampSUModel;
 import dev.yopa.playsu.client.models.DiceEntityModel;
 import dev.yopa.playsu.entities.DiceEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class DiceEntityRenderer extends LivingEntityRenderer<DiceEntity, DiceEntityModel<DiceEntity>> {
@@ -22,7 +20,6 @@ public class DiceEntityRenderer extends LivingEntityRenderer<DiceEntity, DiceEnt
 
     @Override
     public ResourceLocation getTextureLocation(DiceEntity entity) {
-        System.out.println(entity.getEntityData().get(entity.getSideData()));
         switch (entity.getEntityData().get(entity.getSideData())) {
             case 1:
                 return TEXTURE1;
@@ -40,5 +37,9 @@ public class DiceEntityRenderer extends LivingEntityRenderer<DiceEntity, DiceEnt
         return TEXTURE1;
     }
 
+    @Override
+    protected boolean shouldShowName(DiceEntity p_115333_) {
+        return false;
+    }
 }
 
